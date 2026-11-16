@@ -1,0 +1,304 @@
+{
+  "specialties": [
+    {
+      "id": "co-xuong-khop",
+      "name": "Cơ Xương Khớp",
+      "description": "Khám và điều trị các bệnh lý thoái hóa khớp, thoát vị đĩa đệm, đau cột sống lưng, viêm khớp dạng thấp, gout, loãng xương, chấn thương thể thao.",
+      "keywords": ["đau khớp", "thoái hóa khớp", "thoát vị đĩa đệm", "đau lưng", "viêm khớp", "gout", "chấn thương khớp", "đau gối", "đau vai gáy", "loãng xương", "cột sống"]
+    },
+    {
+      "id": "than-kinh",
+      "name": "Thần Kinh",
+      "description": "Điều trị đau đầu kéo dài, mất ngủ kinh niên, chóng mặt, rối loạn tiền đình, đau thần kinh tọa, động kinh, tai biến mạch máu não, Parkinson.",
+      "keywords": ["đau đầu", "mất ngủ", "tiền đình", "chóng mặt", "đau thần kinh", "tai biến", "parkinson", "co giật", "tê bì chân tay", "đột quỵ nhẹ"]
+    },
+    {
+      "id": "tieu-hoa",
+      "name": "Tiêu Hóa - Gan Mật",
+      "description": "Nội soi dạ dày đại tràng không đau, trào ngược dạ dày thực quản (GERD), viêm loét dạ dày HP, viêm gan B/C, gan nhiễm mỡ, sỏi mật, polyp tiêu hóa.",
+      "keywords": ["đau dạ dày", "trào ngược", "ợ chua", "ợ hơi", "viêm đại tràng", "nội soi dạ dày", "viêm gan", "táo bón", "tiêu chảy kéo dài", "sỏi mật", "trĩ", "vi khuẩn hp"]
+    },
+    {
+      "id": "tim-mach",
+      "name": "Tim Mạch",
+      "description": "Khám và điều trị tăng huyết áp, rối loạn nhịp tim, bệnh mạch vành, đau thắt ngực, suy tim, xơ vữa động mạch, bệnh van tim.",
+      "keywords": ["tăng huyết áp", "huyết áp cao", "tức ngực", "khó thở", "hồi hộp", "tim đập nhanh", "đau ngực", "mạch vành", "suy tim", "hở van tim"]
+    },
+    {
+      "id": "tai-mui-hong",
+      "name": "Tai Mũi Họng",
+      "description": "Điều trị viêm xoang cấp và mạn tính, viêm mũi dị ứng, viêm amidan, viêm họng hạt, ù tai, giảm thính lực, viêm tai giữa, khàn tiếng kéo dài.",
+      "keywords": ["viêm xoang", "viêm họng", "ù tai", "chảy nước mũi", "nghẹt mũi", "viêm amidan", "khàn giọng", "đau tai", "viêm tai giữa", "rát họng"]
+    },
+    {
+      "id": "da-lieu",
+      "name": "Da Liễu",
+      "description": "Khám trị mụn trứng cá, nám da, viêm da cơ địa, vảy nến, mề đay dị ứng, zona thần kinh, rụng tóc, nấm móng, ghẻ ngứa, sẹo rỗ.",
+      "keywords": ["mụn trứng cá", "mụn bọc", "dị ứng da", "ngứa da", "vảy nến", "viêm da cơ địa", "rụng tóc", "nám tàn nhang", "mề đay", "nấm da"]
+    },
+    {
+      "id": "san-phu-khoa",
+      "name": "Sản Phụ Khoa",
+      "description": "Khám thai định kỳ, sàng lọc dị tật trước sinh, viêm nhiễm phụ khoa, u xơ tử cung, u nang buồng trứng, rối loạn kinh nguyệt, tư vấn tiền mãn kinh.",
+      "keywords": ["khám thai", "chậm kinh", "viêm phụ khoa", "khí hư bất thường", "u xơ tử cung", "u nang buồng trứng", "đau bụng kinh", "kinh nguyệt không đều"]
+    },
+    {
+      "id": "nhi-khoa",
+      "name": "Nhi Khoa",
+      "description": "Khám chữa bệnh cho trẻ sơ sinh và trẻ nhỏ: sốt virus, ho hen suyễn, viêm phế quản, biếng ăn suy dinh dưỡng, rối loạn tiêu hóa ở trẻ, tiêm chủng.",
+      "keywords": ["trẻ sốt", "bé ho khò khè", "nhi khoa", "biếng ăn", "tiêu chảy trẻ em", "viêm phế quản trẻ em", "suy dinh dưỡng trẻ", "khám sơ sinh"]
+    },
+    {
+      "id": "mat",
+      "name": "Mắt (Nhãn Khoa)",
+      "description": "Khám tật khúc xạ (cận thị, loạn thị), đo mắt cắt kính, mổ Phaco điều trị đục thủy tinh thể, viêm kết mạc (đau mắt đỏ), bệnh võng mạc tiểu đường.",
+      "keywords": ["mờ mắt", "cận thị", "loạn thị", "đau mắt đỏ", "đục thủy tinh thể", "khô mắt", "mỏi mắt", "bệnh mộng thịt", "viêm kết mạc"]
+    },
+    {
+      "id": "tam-than-tam-ly",
+      "name": "Sức Khỏe Tinh Thần & Tâm Lý",
+      "description": "Khám và trị liệu rối loạn lo âu, trầm cảm, stress công việc, rối loạn giấc ngủ, hoảng sợ (panic attack), ám ảnh cưỡng chế (OCD), trị liệu tâm lý nhận thức hành vi.",
+      "keywords": ["stress", "căng thẳng", "trầm cảm", "lo âu quá mức", "mất ngủ lo âu", "sợ hãi", "buồn bã vô cớ", "bất an", "tâm lý trị liệu"]
+    },
+    {
+      "id": "noi-tiet",
+      "name": "Nội Tiết - Đái Tháo Đường",
+      "description": "Khám và kiểm soát tiểu đường type 1 và 2, bệnh lý tuyến giáp (bướu cổ, basedow, suy giáp, u tuyến giáp), rối loạn mỡ máu, thừa cân béo phì.",
+      "keywords": ["tiểu đường", "đái tháo đường", "tuyến giáp", "bướu cổ", "basedow", "suy giáp", "mỡ máu cao", "hạ đường huyết"]
+    },
+    {
+      "id": "rang-ham-mat",
+      "name": "Nha Khoa - Răng Hàm Mặt",
+      "description": "Nhổ răng khôn không đau, niềng răng thẩm mỹ, cấy ghép Implant, bọc răng sứ, điều trị tủy, viêm lợi, cao răng, tẩy trắng răng.",
+      "keywords": ["đau răng", "nhổ răng khôn", "niềng răng", "sâu răng", "viêm lợi", "chảy máu chân răng", "trồng răng implant", "lấy cao răng"]
+    }
+  ],
+  "clinics": [
+    {
+      "id": "bv-cho-ray",
+      "name": "Bệnh viện Chợ Rẫy",
+      "city": "TP. Hồ Chí Minh",
+      "address": "201B Nguyễn Chí Thanh, Phường 12, Quận 5, TP.HCM",
+      "description": "Bệnh viện đa khoa tuyến Trung ương hạng đặc biệt lớn nhất miền Nam với trang thiết bị chẩn đoán chuyên sâu.",
+      "specialties": ["co-xuong-khop", "than-kinh", "tieu-hoa", "tim-mach", "tai-mui-hong", "mat", "noi-tiet"],
+      "openHours": "Thứ 2 - Thứ 6: 07:00 - 16:00, Thứ 7: 07:00 - 11:00",
+      "bookingInstructions": "Bệnh nhân đặt khám dịch vụ được ưu tiên lấy số và hướng dẫn riêng tại lầu 1 khu Khám chuyên gia."
+    },
+    {
+      "id": "bv-dai-hoc-y-duoc",
+      "name": "Bệnh viện Đại học Y Dược TP.HCM",
+      "city": "TP. Hồ Chí Minh",
+      "address": "215 Hồng Bàng, Phường 11, Quận 5, TP.HCM",
+      "description": "Trung tâm y tế học thuật hàng đầu kết hợp điều trị hiện đại với các Giáo sư, Bác sĩ đầu ngành của ĐH Y Dược TP.HCM.",
+      "specialties": ["co-xuong-khop", "than-kinh", "tieu-hoa", "tim-mach", "tai-mui-hong", "da-lieu", "san-phu-khoa", "nhi-khoa", "noi-tiet"],
+      "openHours": "Thứ 2 - Thứ 6: 06:30 - 16:30, Thứ 7: 06:30 - 11:30",
+      "bookingInstructions": "Đến quầy Tiếp nhận BookingCare tại sảnh chính cơ sở 1 trước giờ hẹn 15 phút để xuất phiếu khám nhanh."
+    },
+    {
+      "id": "bv-viet-duc",
+      "name": "Bệnh viện Hữu nghị Việt Đức",
+      "city": "Hà Nội",
+      "address": "40 Tràng Thi, Hoàn Kiếm, Hà Nội",
+      "description": "Trung tâm ngoại khoa và phẫu thuật hàng đầu cả nước, thế mạnh nổi bật về Chấn thương chỉnh hình, Cơ Xương Khớp và Phẫu thuật thần kinh.",
+      "specialties": ["co-xuong-khop", "than-kinh", "tieu-hoa", "tim-mach"],
+      "openHours": "Thứ 2 - Thứ 7: 07:00 - 16:30",
+      "bookingInstructions": "Đăng ký khám theo yêu cầu tại nhà C4, xuất trình mã QR xác nhận từ BookingCare."
+    },
+    {
+      "id": "bv-bach-mai",
+      "name": "Bệnh viện Bạch Mai",
+      "city": "Hà Nội",
+      "address": "78 Giải Phóng, Phường Phương Mai, Đống Đa, Hà Nội",
+      "description": "Bệnh viện đa khoa hoàn chỉnh hạng đặc biệt lớn nhất miền Bắc, sở hữu các viện đầu ngành như Viện Tim mạch, Khoa Tiêu hóa, Thần kinh.",
+      "specialties": ["tim-mach", "than-kinh", "tieu-hoa", "co-xuong-khop", "noi-tiet", "tam-than-tam-ly", "tai-mui-hong"],
+      "openHours": "Thứ 2 - Thứ 7: 06:30 - 17:00, Chủ nhật: 07:00 - 12:00",
+      "bookingInstructions": "Khám tại Khoa Khám bệnh theo yêu cầu (nhà K1), ưu tiên theo khung giờ đã đặt trước trên BookingCare."
+    },
+    {
+      "id": "pk-saigon-healthcare",
+      "name": "Phòng khám Đa khoa Saigon Healthcare",
+      "city": "TP. Hồ Chí Minh",
+      "address": "45 Thành Thái, Phường 14, Quận 10, TP.HCM",
+      "description": "Phòng khám chuẩn quốc tế sạch sẽ, không gian thân thiện, trang bị hệ thống máy nội soi Olympus EVIS X1 hiện đại bậc nhất.",
+      "specialties": ["tieu-hoa", "san-phu-khoa", "tim-mach", "tai-mui-hong", "da-lieu", "co-xuong-khop", "tam-than-tam-ly"],
+      "openHours": "Thứ 2 - Thứ 7: 07:00 - 19:30, Chủ nhật: 07:00 - 11:30",
+      "bookingInstructions": "Không phải bốc số chờ đợi, đến thẳng quầy lễ tân tầng trệt và báo số điện thoại đặt qua BookingCare."
+    },
+    {
+      "id": "pk-doctor-check",
+      "name": "Trung tâm Tầm soát Tiêu hóa Doctor Check",
+      "city": "TP. Hồ Chí Minh",
+      "address": "429 Tô Hiến Thành, Phường 14, Quận 10, TP.HCM",
+      "description": "Chuyên sâu về nội soi tiêu hóa không đau, tầm soát phát hiện sớm ung thư dạ dày - đại trực tràng với công nghệ AI phóng đại NBI.",
+      "specialties": ["tieu-hoa"],
+      "openHours": "Thứ 2 - Chủ nhật: 06:00 - 15:00",
+      "bookingInstructions": "Bệnh nhân nội soi cần nhịn ăn tối thiểu 6-8 tiếng. Đặt trước để nhận gói chuẩn bị làm sạch ruột tại nhà."
+    },
+    {
+      "id": "pk-pro-skin",
+      "name": "Phòng khám Chuyên khoa Da liễu Pro Skin",
+      "city": "TP. Hồ Chí Minh",
+      "address": "361 Phạm Văn Đồng, Phường 11, Quận Bình Thạnh, TP.HCM",
+      "description": "Phòng khám da liễu đạt chuẩn Sở Y tế với đội ngũ 100% bác sĩ chuyên khoa I, II từ BV Da Liễu TP.HCM, quy trình chuẩn y khoa.",
+      "specialties": ["da-lieu"],
+      "openHours": "Thứ 2 - Thứ 7: 09:00 - 20:00, Chủ nhật: 09:00 - 17:00",
+      "bookingInstructions": "Miễn phí soi da phân tích chuyên sâu bằng máy Visia khi đặt hẹn trước qua BookingCare."
+    },
+    {
+      "id": "bv-mat-ha-noi-2",
+      "name": "Bệnh viện Mắt Hà Nội 2",
+      "city": "Hà Nội",
+      "address": "72 Nguyễn Chí Thanh, Láng Thượng, Đống Đa, Hà Nội",
+      "description": "Bệnh viện chuyên khoa mắt hợp tác quốc tế, trang thiết bị đồng bộ từ Carl Zeiss (Đức) điều trị tật khúc xạ Smile Pro và Phaco.",
+      "specialties": ["mat"],
+      "openHours": "Thứ 2 - Thứ 7: 07:00 - 19:00, Chủ nhật: 07:00 - 12:00",
+      "bookingInstructions": "Trẻ nhỏ đi khám đo tật khúc xạ được hỗ trợ tra thuốc liệt điều tiết tại phòng chờ riêng."
+    }
+  ],
+  "doctors": [
+    {
+      "id": "doc-nguyen-trong-thong",
+      "name": "PGS.TS.BS Nguyễn Trọng Thông",
+      "title": "Phó Giáo sư, Tiến sĩ, Bác sĩ Cao cấp",
+      "specialtyId": "than-kinh",
+      "clinicId": "bv-bach-mai",
+      "experienceYears": 38,
+      "price": 450000,
+      "bio": "Chuyên gia Thần kinh hàng đầu miền Bắc, nguyên Trưởng bộ môn Dược lý ĐH Y Hà Nội, chuyên sâu điều trị đau nửa đầu Migraine, rối loạn tiền đình và tai biến mạch máu não.",
+      "availableDays": ["Thứ 2", "Thứ 4", "Thứ 6"],
+      "timeSlots": ["08:00 - 09:00", "09:00 - 10:00", "10:00 - 11:30", "14:00 - 15:30", "15:30 - 17:00"]
+    },
+    {
+      "id": "doc-tran-trung-dung",
+      "name": "PGS.TS.BS Trần Trung Dũng",
+      "title": "Phó Giáo sư, Tiến sĩ, Bác sĩ Chuyên khoa II",
+      "specialtyId": "co-xuong-khop",
+      "clinicId": "bv-viet-duc",
+      "experienceYears": 25,
+      "price": 500000,
+      "bio": "Bàn tay vàng trong phẫu thuật nội soi khớp gối, khớp háng, thay khớp nhân tạo và điều trị thoái hóa khớp công nghệ tế bào gốc sinh học.",
+      "availableDays": ["Thứ 3", "Thứ 5", "Thứ 7"],
+      "timeSlots": ["08:00 - 09:30", "09:30 - 11:00", "13:30 - 15:00", "15:00 - 16:30"]
+    },
+    {
+      "id": "doc-nguyen-thi-thanh-ha",
+      "name": "BSCKII Nguyễn Thị Thanh Hà",
+      "title": "Bác sĩ Chuyên khoa II Sản Phụ Khoa",
+      "specialtyId": "san-phu-khoa",
+      "clinicId": "bv-dai-hoc-y-duoc",
+      "experienceYears": 32,
+      "price": 400000,
+      "bio": "Nguyên Trưởng khoa Phụ Sản BV Đại học Y Dược TP.HCM. Chuyên gia tư vấn thai sản trọn gói, điều trị viêm nhiễm âm đạo dai dẳng, polyp cổ tử cung và u xơ.",
+      "availableDays": ["Thứ 2", "Thứ 3", "Thứ 5", "Thứ 6"],
+      "timeSlots": ["08:00 - 09:00", "09:00 - 10:00", "10:00 - 11:30", "13:30 - 15:00", "15:00 - 16:30"]
+    },
+    {
+      "id": "doc-pham-thi-thu-thuy",
+      "name": "TS.BS Phạm Thị Thu Thủy",
+      "title": "Tiến sĩ, Bác sĩ Chuyên khoa Nội tiêu hóa",
+      "specialtyId": "tieu-hoa",
+      "clinicId": "pk-doctor-check",
+      "experienceYears": 28,
+      "price": 350000,
+      "bio": "Chuyên gia gan mật và tiêu hóa uy tín, giàu kinh nghiệm điều trị viêm gan virus B, C, xơ gan, trào ngược dạ dày thực quản (GERD) và vi khuẩn HP kháng thuốc.",
+      "availableDays": ["Thứ 2", "Thứ 4", "Thứ 6", "Chủ nhật"],
+      "timeSlots": ["07:30 - 09:00", "09:00 - 10:30", "10:30 - 12:00", "13:30 - 15:00"]
+    },
+    {
+      "id": "doc-tran-ngoc-luu-phuong",
+      "name": "TS.BSCKII Trần Ngọc Lưu Phương",
+      "title": "Tiến sĩ, Bác sĩ Chuyên khoa II",
+      "specialtyId": "tieu-hoa",
+      "clinicId": "pk-saigon-healthcare",
+      "experienceYears": 26,
+      "price": 400000,
+      "bio": "Trưởng đơn vị Tiêu hóa can thiệp BV Nguyễn Tri Phương, Giảng viên bộ môn Nội ĐH Y khoa Phạm Ngọc Thạch. Nổi tiếng với phương pháp nội soi đại tràng êm ái.",
+      "availableDays": ["Thứ 3", "Thứ 5", "Thứ 7"],
+      "timeSlots": ["08:00 - 09:30", "09:30 - 11:30", "14:00 - 16:00", "16:00 - 18:00"]
+    },
+    {
+      "id": "doc-do-thi-ngoc-lan",
+      "name": "BSCKII Đỗ Thị Ngọc Lan",
+      "title": "Bác sĩ Chuyên khoa II Da liễu",
+      "specialtyId": "da-lieu",
+      "clinicId": "pk-pro-skin",
+      "experienceYears": 22,
+      "price": 300000,
+      "bio": "Hơn 20 năm kinh nghiệm điều trị mụn trứng cá nặng, sẹo rỗ, viêm da tiết bã, nấm móng và phục hồi da nhiễm corticoid bằng phác đồ chuẩn y khoa.",
+      "availableDays": ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 7"],
+      "timeSlots": ["09:00 - 11:00", "14:00 - 16:00", "16:30 - 18:30", "18:30 - 20:00"]
+    },
+    {
+      "id": "doc-pham-manh-hung",
+      "name": "PGS.TS.BS Phạm Mạnh Hùng",
+      "title": "Phó Giáo sư, Tiến sĩ, Bác sĩ Tim mạch",
+      "specialtyId": "tim-mach",
+      "clinicId": "bv-bach-mai",
+      "experienceYears": 30,
+      "price": 500000,
+      "bio": "Viện phó Viện Tim Mạch Quốc Gia, chuyên gia can thiệp tim mạch hàng đầu Đông Nam Á, điều trị chuyên sâu bệnh mạch vành, nhồi máu cơ tim và suy tim mãn tính.",
+      "availableDays": ["Thứ 3", "Thứ 6"],
+      "timeSlots": ["08:30 - 10:00", "10:00 - 11:30", "14:00 - 16:00"]
+    },
+    {
+      "id": "doc-nguyen-minh-hue",
+      "name": "ThS.BS Nguyễn Minh Huệ",
+      "title": "Thạc sĩ, Bác sĩ Chuyên khoa Tai Mũi Họng",
+      "specialtyId": "tai-mui-hong",
+      "clinicId": "bv-dai-hoc-y-duoc",
+      "experienceYears": 16,
+      "price": 300000,
+      "bio": "Chuyên gia nội soi Tai Mũi Họng ống mềm không đau, điều trị viêm xoang polyp mũi, nạo VA bằng dao Plasma nhiệt độ thấp cho trẻ nhỏ và người lớn.",
+      "availableDays": ["Thứ 2", "Thứ 4", "Thứ 6", "Thứ 7"],
+      "timeSlots": ["08:00 - 09:30", "09:30 - 11:30", "13:30 - 15:30", "15:30 - 17:00"]
+    },
+    {
+      "id": "doc-bui-thi-thanh-nhan",
+      "name": "BSCKII Bùi Thị Thanh Nhàn",
+      "title": "Bác sĩ Chuyên khoa II Nhi",
+      "specialtyId": "nhi-khoa",
+      "clinicId": "bv-cho-ray",
+      "experienceYears": 24,
+      "price": 300000,
+      "bio": "Nguyên Bác sĩ Bệnh viện Nhi Đồng 1, chuyên gia hô hấp và tiêu hóa nhi, tư vấn chăm sóc sức khỏe sơ sinh và tiêm chủng khoa học.",
+      "availableDays": ["Thứ 2", "Thứ 3", "Thứ 5", "Thứ 7"],
+      "timeSlots": ["08:00 - 10:00", "10:00 - 11:30", "14:00 - 16:00"]
+    },
+    {
+      "id": "doc-nguyen-thi-hoai",
+      "name": "BSCKII Nguyễn Thị Hoài",
+      "title": "Bác sĩ Chuyên khoa II Mắt",
+      "specialtyId": "mat",
+      "clinicId": "bv-mat-ha-noi-2",
+      "experienceYears": 20,
+      "price": 300000,
+      "bio": "Chuyên gia phẫu thuật khúc xạ Lasik/Femto/ReLEx SMILE, điều trị đục thủy tinh thể Phaco, theo dõi và bảo tồn thị lực cho bệnh nhân glôcôm.",
+      "availableDays": ["Thứ 2", "Thứ 3", "Thứ 5", "Thứ 6", "Chủ nhật"],
+      "timeSlots": ["08:00 - 10:00", "10:00 - 11:30", "13:30 - 15:30", "15:30 - 17:30"]
+    },
+    {
+      "id": "doc-dang-thi-kim-huyen",
+      "name": "ThS.BSCKII Đặng Thị Kim Huyên",
+      "title": "Thạc sĩ, Bác sĩ Chuyên khoa Tâm thần & Tâm lý trị liệu",
+      "specialtyId": "tam-than-tam-ly",
+      "clinicId": "pk-saigon-healthcare",
+      "experienceYears": 18,
+      "price": 450000,
+      "bio": "Chuyên gia tâm thần học và tâm lý trị liệu nhận thức hành vi (CBT), điều trị hiệu quả rối loạn trầm cảm, rối loạn hoảng sợ, stress sang chấn và mất ngủ mãn tính.",
+      "availableDays": ["Thứ 4", "Thứ 6", "Thứ 7"],
+      "timeSlots": ["09:00 - 10:30", "10:30 - 12:00", "14:00 - 15:30", "15:30 - 17:30"]
+    },
+    {
+      "id": "doc-vo-hoang-minh",
+      "name": "TS.BS Võ Hoàng Minh",
+      "title": "Tiến sĩ, Bác sĩ Chuyên khoa Nội tiết",
+      "specialtyId": "noi-tiet",
+      "clinicId": "bv-cho-ray",
+      "experienceYears": 21,
+      "price": 350000,
+      "bio": "Chuyên sâu chẩn đoán và điều trị bệnh đái tháo đường biến chứng bàn chân, suy tuyến thượng thận, bệnh lý cường giáp Basedow và theo dõi nhân xơ tuyến giáp.",
+      "availableDays": ["Thứ 2", "Thứ 4", "Thứ 5"],
+      "timeSlots": ["08:00 - 10:00", "10:00 - 11:30", "13:30 - 15:30"]
+    }
+  ]
+}

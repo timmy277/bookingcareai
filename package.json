@@ -1,0 +1,15 @@
+{
+  "name": "bookingcare-ai",
+  "version": "1.0.0",
+  "description": "BookingCare AI Assistant - Medical Appointment Booking and Consultation with LLM & LangChain & NestJS",
+  "scripts": {
+    "start:server": "npm --prefix server run start:dev",
+    "start:client": "npm --prefix client run dev",
+    "build:server": "npm --prefix server run build",
+    "build:client": "npm --prefix client run build",
+    "eval": "npm --prefix server run eval"
+  },
+  "keywords": ["bookingcare", "healthcare", "langchain", "nestjs", "typescript", "react"],
+  "author": "BookingCare AI Team",
+  "license": "MIT"
+}

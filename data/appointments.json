@@ -1,0 +1,21 @@
+[
+  {
+    "id": "BKC-4740",
+    "patientName": "Nguy?n Van An",
+    "patientPhone": "0987654321",
+    "patientEmail": "an.nguyen@example.com",
+    "doctorId": "doc-tran-trung-dung",
+    "doctorName": "PGS.TS.BS Trần Trung Dũng",
+    "doctorTitle": "Phó Giáo sư, Tiến sĩ, Bác sĩ Chuyên khoa II",
+    "clinicId": "bv-viet-duc",
+    "clinicName": "Bệnh viện Hữu nghị Việt Đức",
+    "clinicAddress": "40 Tràng Thi, Hoàn Kiếm, Hà Nội",
+    "specialtyName": "Cơ Xương Khớp",
+    "price": 500000,
+    "date": "2026-11-20",
+    "timeSlot": "08:00 - 09:30",
+    "symptoms": "Dau kh?p g?i khi leo c?u thang",
+    "status": "confirmed",
+    "createdAt": "2026-11-16T23:00:00.778Z"
+  }
+]
