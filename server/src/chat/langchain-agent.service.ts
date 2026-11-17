@@ -193,22 +193,25 @@ export class LangChainAgentService {
       };
     }
 
-    // 3. Try External LLM if apiKey provided, else fallback to Local Deterministic Agent
-    const provider = dto.provider || 'local';
+    // 3. Model Engine Selection
+    const openaiKey = dto.apiKey || process.env.OPENAI_API_KEY;
+    const provider = dto.provider || (openaiKey ? 'openai' : 'local');
     let assistantMessage = '';
     let inputTokens = 0;
     let outputTokens = 0;
-    let modelName = 'Local-Medical-Expert';
+    let modelName = 'clinical-triage-v1';
 
-    if (dto.apiKey && provider === 'openai') {
+    if (openaiKey && provider === 'openai') {
       try {
         const { ChatOpenAI } = await import('@langchain/openai');
         modelName = dto.model || 'gpt-4o';
         const llm = new ChatOpenAI({
-          apiKey: dto.apiKey,
+          apiKey: openaiKey,
           modelName: modelName,
           maxTokens: 500, // Constraint: <= 500 output tokens
           temperature: 0.2,
+          maxRetries: 1,
+          timeout: 6000,
         });
 
         const systemPrompt = `Bạn là Trợ lý AI y tế thông minh của nền tảng BookingCare (bookingcare.vn).
@@ -228,39 +231,19 @@ Bác sĩ phù hợp: ${suggestedDoctors.map((d) => `${d.name} (${d.title}) - ${d
         ]);
 
         assistantMessage = typeof resp.content === 'string' ? resp.content : JSON.stringify(resp.content);
-        inputTokens = (resp.response_metadata?.tokenUsage?.promptTokens as number) || Math.round(systemPrompt.length / 3.5);
-        outputTokens = (resp.response_metadata?.tokenUsage?.completionTokens as number) || Math.round(assistantMessage.length / 3.5);
+        inputTokens = (resp.response_metadata?.tokenUsage?.promptTokens as number) || this.estimateTokens(systemPrompt + userQuery);
+        outputTokens = (resp.response_metadata?.tokenUsage?.completionTokens as number) || this.estimateTokens(assistantMessage);
       } catch (err: any) {
-        console.warn('[LangChainAgentService] External OpenAI call failed, falling back to local engine:', err.message);
+        console.warn('[LangChainAgentService] External OpenAI call failed, falling back to local clinical engine:', err.message);
         assistantMessage = this.generateLocalResponse(userQuery, topSpecialty, suggestedDoctors, specificDoctor, specificClinic);
-      }
-    } else if (dto.apiKey && provider === 'anthropic') {
-      try {
-        const { ChatAnthropic } = await import('@langchain/anthropic');
-        modelName = dto.model || 'claude-3-5-haiku-20241022';
-        const llm = new ChatAnthropic({
-          apiKey: dto.apiKey,
-          modelName: modelName,
-          maxTokens: 500, // Constraint: <= 500 output tokens
-          temperature: 0.2,
-        });
-
-        const systemPrompt = `Bạn là Trợ lý AI BookingCare (bookingcare.vn). Hỗ trợ người dùng tìm chuyên khoa, bác sĩ và đặt lịch khám. Trả lời ngắn gọn < 500 tokens.
-Dữ liệu:
-- Chuyên khoa: ${topSpecialty ? topSpecialty.name : 'Đa khoa'}
-- Bác sĩ: ${suggestedDoctors.map((d) => `${d.name} (${d.clinicName}, ${d.price.toLocaleString('vi-VN')}đ)`).join('; ')}`;
-
-        const resp = await llm.invoke([
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userQuery },
-        ]);
-
-        assistantMessage = typeof resp.content === 'string' ? resp.content : JSON.stringify(resp.content);
-        inputTokens = (resp.response_metadata?.usage?.input_tokens as number) || 1200;
-        outputTokens = (resp.response_metadata?.usage?.output_tokens as number) || 280;
-      } catch (err: any) {
-        console.warn('[LangChainAgentService] External Anthropic call failed, falling back:', err.message);
-        assistantMessage = this.generateLocalResponse(userQuery, topSpecialty, suggestedDoctors, specificDoctor, specificClinic);
+        const promptContext = `System: Bạn là Trợ lý Y tế BookingCare (bookingcare.vn). Hỗ trợ tìm kiếm chuyên khoa, bác sĩ và đặt lịch khám.
+Dữ liệu lâm sàng:
+- Chuyên khoa: ${topSpecialty ? `${topSpecialty.name} - ${topSpecialty.description}` : 'Đa khoa'}
+- Bác sĩ: ${suggestedDoctors.map((d) => `${d.name} (${d.title}) - ${d.clinicName} - Giá: ${d.price.toLocaleString('vi-VN')}đ - Lịch: ${d.availableDays.join(', ')}`).join('; ')}
+User: ${userQuery}`;
+        inputTokens = this.estimateTokens(promptContext);
+        outputTokens = this.estimateTokens(assistantMessage);
+        modelName = 'clinical-triage-v1';
       }
     } else {
       assistantMessage = this.generateLocalResponse(userQuery, topSpecialty, suggestedDoctors, specificDoctor, specificClinic);

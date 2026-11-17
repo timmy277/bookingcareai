@@ -85,7 +85,14 @@ Hệ thống tích hợp bộ công cụ đánh giá tự động 100 kịch b�
 npm run install:all
 ```
 
-### 2. Khởi Chạy Môi Trường Phát Triển (Development)
+### 2. Cấu Hình Môi Trường (Environment)
+Tạo file `.env` từ file mẫu đã có sẵn:
+```bash
+cp server/.env.example server/.env
+```
+*(File mẫu `.env.example` đã thiết lập sẵn cấu hình cổng `PORT=5000` và `OPENAI_API_KEY`).*
+
+### 3. Khởi Chạy Môi Trường Phát Triển (Development)
 
 Mở 2 tiến trình terminal:
 

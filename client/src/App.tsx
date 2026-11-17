@@ -55,8 +55,8 @@ export default function App() {
 
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [provider, setProvider] = useState<'local' | 'openai' | 'anthropic'>(() => {
-    return (localStorage.getItem('bookingcare_provider') as any) || 'local';
+  const [provider, setProvider] = useState<'local' | 'openai'>(() => {
+    return (localStorage.getItem('bookingcare_provider') as any) || 'openai';
   });
   const [apiKey, setApiKey] = useState(() => {
     return localStorage.getItem('bookingcare_api_key') || '';
@@ -320,7 +320,7 @@ export default function App() {
               </button>
             </div>
 
-            {/* Provider Selector & API Key */}
+            {/* Provider Selector */}
             <div className="hidden md:flex items-center space-x-2 bg-slate-100 px-3 py-1.5 rounded-lg text-xs">
               <span className="text-slate-500 font-medium">Model:</span>
               <select
@@ -328,17 +328,16 @@ export default function App() {
                 onChange={(e) => setProvider(e.target.value as any)}
                 className="bg-transparent border-0 text-slate-800 font-semibold focus:ring-0 cursor-pointer text-xs"
               >
-                <option value="local">⚡ Local Engine (Siêu tốc &lt;0.5s)</option>
-                <option value="openai">OpenAI (GPT-4o/5.4 Reasoning Med)</option>
-                <option value="anthropic">Claude (Haiku 5.5 Reasoning Med)</option>
+                <option value="openai">OpenAI (GPT-4o / GPT-5.4)</option>
+                <option value="local">⚡ Local Engine (Tốc độ cao)</option>
               </select>
-              {provider !== 'local' && (
+              {provider === 'openai' && (
                 <input
                   type="password"
-                  placeholder="Nhập API Key..."
+                  placeholder="API Key (mặc định server)..."
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
-                  className="w-32 bg-white border border-slate-300 rounded px-2 py-0.5 text-[11px] focus:outline-none"
+                  className="w-36 bg-white border border-slate-300 rounded px-2 py-0.5 text-[11px] focus:outline-none"
                 />
               )}
             </div>
