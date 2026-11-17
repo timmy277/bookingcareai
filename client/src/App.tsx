@@ -11,11 +11,9 @@ import {
   RefreshCw,
   Search,
   Send,
-  ShieldCheck,
   Stethoscope,
   Trash2,
   User,
-  Zap,
 } from 'lucide-react';
 import { Appointment, ChatMessage, Doctor, EvaluationSummary } from './types';
 
@@ -30,17 +28,8 @@ const SUGGESTION_QUERIES = [
 const DEFAULT_WELCOME_MESSAGE: ChatMessage = {
   id: 'msg-welcome',
   role: 'assistant',
-  content: `Xin chào quý khách! Tôi là **Trợ lý AI Y tế BookingCare**.\n\nTôi có thể hỗ trợ quý khách:\n1. **Tư vấn triệu chứng** & gợi ý chuyên khoa phù hợp.\n2. **Tìm kiếm Bác sĩ & Bệnh viện** hàng đầu (Bạch Mai, Chợ Rẫy, Việt Đức, ĐH Y Dược...).\n3. **Tra cứu giá khám** & các khung giờ còn trống.\n4. **Đặt lịch khám nhanh chóng**, nhận ngay mã phiếu hẹn điện tử.\n\nQuý khách đang có triệu chứng gì hoặc muốn đặt lịch khám với chuyên gia nào?`,
+  content: `Kính chào quý khách! Tôi là **Trợ lý Y tế BookingCare**.\n\nTôi có thể hỗ trợ quý khách:\n1. **Tư vấn triệu chứng** & định hướng chuyên khoa phù hợp.\n2. **Tìm kiếm Bác sĩ & Bệnh viện** đầu ngành (Bạch Mai, Chợ Rẫy, Việt Đức, ĐH Y Dược...).\n3. **Tra cứu bảng giá khám** & lịch làm việc của các chuyên gia.\n4. **Đặt lịch khám trực tuyến** và xuất phiếu khám điện tử nhanh chóng.\n\nQuý khách đang cần tư vấn về triệu chứng gì hoặc muốn đặt lịch khám với bác sĩ nào?`,
   timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
-  metrics: {
-    latencyMs: 120,
-    inputTokens: 120,
-    outputTokens: 180,
-    modelUsed: 'BookingCare-Assistant-v1',
-    provider: 'Local-Medical-RAG',
-    isWithinTokenLimit: true,
-    isWithinLatencyLimit: true,
-  },
 };
 
 export default function App() {
@@ -357,29 +346,22 @@ export default function App() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Chat Area (2 Columns) */}
             <div className="lg:col-span-2 flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden h-[calc(100vh-140px)]">
-              {/* Constraints SLA Status Bar */}
-              <div className="bg-slate-50 border-b border-slate-200 px-4 py-2.5 flex items-center justify-between text-xs text-slate-600 flex-wrap gap-2">
-                <div className="flex items-center space-x-4">
-                  <span className="flex items-center text-emerald-600 font-semibold">
-                    <ShieldCheck className="w-4 h-4 mr-1 text-emerald-500" /> SLA Đạt Chuẩn
-                  </span>
-                  <span>⏱️ Latency: <strong className="text-slate-800">&le; 10s</strong></span>
-                  <span>📥 Input: <strong className="text-slate-800">&le; 30k tokens</strong></span>
-                  <span>📤 Output: <strong className="text-slate-800">&le; 500 tokens</strong></span>
-                </div>
+              {/* Chat Subheader */}
+              <div className="bg-slate-50 border-b border-slate-200 px-4 py-2.5 flex items-center justify-between text-xs text-slate-600">
                 <div className="flex items-center space-x-2">
-                  <span className="text-cyan-700 font-medium bg-cyan-50 px-2 py-0.5 rounded border border-cyan-100 hidden sm:inline">
-                    LangChain + TypeScript + ReactJS
-                  </span>
-                  <button
-                    onClick={handleClearChatHistory}
-                    title="Xóa lịch sử trò chuyện"
-                    className="flex items-center space-x-1 text-slate-500 hover:text-rose-600 px-2 py-0.5 rounded hover:bg-rose-50 transition-colors text-[11px] font-medium"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    <span>Xóa chat</span>
-                  </button>
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="font-semibold text-slate-800">Trợ lý Y tế Trực tuyến</span>
+                  <span className="text-slate-300">|</span>
+                  <span className="text-slate-500 hidden sm:inline">Tư vấn chuyên khoa & Hỗ trợ đặt lịch khám chính thức</span>
                 </div>
+                <button
+                  onClick={handleClearChatHistory}
+                  title="Bắt đầu phiên trò chuyện mới"
+                  className="flex items-center space-x-1 text-slate-500 hover:text-rose-600 px-2.5 py-1 rounded-lg hover:bg-rose-50 transition-colors text-xs font-medium"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Xóa cuộc trò chuyện</span>
+                </button>
               </div>
 
               {/* Chat Messages */}
@@ -410,23 +392,6 @@ export default function App() {
                       <div className="whitespace-pre-line prose prose-sm max-w-none">
                         {msg.content}
                       </div>
-
-                      {/* Live Constraints Metric Tag */}
-                      {msg.metrics && (
-                        <div className="mt-3 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-500 flex-wrap gap-2">
-                          <div className="flex items-center space-x-3">
-                            <span className="flex items-center">
-                              <Zap className="w-3.5 h-3.5 text-amber-500 mr-1" />
-                              {(msg.metrics.latencyMs / 1000).toFixed(2)}s
-                            </span>
-                            <span>In: {msg.metrics.inputTokens} tok</span>
-                            <span>Out: {msg.metrics.outputTokens} tok</span>
-                          </div>
-                          <span className="bg-white/80 px-1.5 py-0.5 rounded text-[10px] text-slate-600 border border-slate-200">
-                            {msg.metrics.modelUsed}
-                          </span>
-                        </div>
-                      )}
                     </div>
 
                     {/* Interactive Doctor Cards */}
