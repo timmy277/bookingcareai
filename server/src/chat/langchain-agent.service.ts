@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BookingService } from '../booking/booking.service';
 import { CatalogService } from '../catalog/catalog.service';
-import { AssistantResponse, ChatMessage, ChatRequestDto, Doctor, Specialty } from '../types';
+import { AssistantResponse, ChatMessage, ChatRequestDto, Clinic, Doctor, Specialty } from '../types';
 
 @Injectable()
 export class LangChainAgentService {
@@ -114,9 +114,12 @@ export class LangChainAgentService {
       };
     }
 
-    // 2. Determine intent and query knowledge base
-    const matchedSpecialties = this.catalogService.findSpecialtiesByQuery(userQuery);
-    const topSpecialty = matchedSpecialties.length > 0 ? matchedSpecialties[0] : null;
+    // 2. High-precision Entity Recognition
+    // Check if query targets a specific doctor
+    const specificDoctor = this.catalogService.findDoctorByNameInQuery(userQuery);
+
+    // Check if query targets a specific clinic
+    const specificClinic = this.catalogService.findClinicByNameInQuery(userQuery);
 
     // Detect city filter if mentioned
     let cityFilter: string | undefined = undefined;
@@ -135,19 +138,37 @@ export class LangChainAgentService {
       }
     }
 
-    // Search doctors matching query or specialty
-    let suggestedDoctors = this.catalogService.searchDoctors(topSpecialty?.id, cityFilter, maxPriceFilter);
-    if (suggestedDoctors.length === 0 && topSpecialty) {
-      suggestedDoctors = this.catalogService.searchDoctors(topSpecialty.id);
+    // Match specialty based on symptoms
+    const matchedSpecialties = this.catalogService.findSpecialtiesByQuery(userQuery);
+    let topSpecialty: Specialty | null = matchedSpecialties.length > 0 ? matchedSpecialties[0] : null;
+
+    let suggestedDoctors: (Doctor & { clinicName: string; clinicCity: string; specialtyName: string })[] = [];
+
+    if (specificDoctor) {
+      suggestedDoctors = [specificDoctor];
+      const docSpec = this.catalogService.getSpecialtyById(specificDoctor.specialtyId);
+      if (docSpec) topSpecialty = docSpec;
+    } else if (specificClinic) {
+      suggestedDoctors = this.catalogService
+        .searchDoctors(topSpecialty?.id, specificClinic.city, maxPriceFilter)
+        .filter((d) => d.clinicId === specificClinic.id);
+      if (suggestedDoctors.length === 0) {
+        suggestedDoctors = this.catalogService
+          .searchDoctors(undefined, specificClinic.city)
+          .filter((d) => d.clinicId === specificClinic.id);
+      }
+    } else if (topSpecialty) {
+      suggestedDoctors = this.catalogService.searchDoctors(topSpecialty.id, cityFilter, maxPriceFilter);
+      if (suggestedDoctors.length === 0) {
+        suggestedDoctors = this.catalogService.searchDoctors(topSpecialty.id);
+      }
+    } else {
+      suggestedDoctors = this.catalogService.searchDoctors(undefined, cityFilter, maxPriceFilter);
     }
-    if (suggestedDoctors.length === 0) {
-      suggestedDoctors = this.catalogService.searchDoctors(undefined, cityFilter);
-    }
-    // Limit to top 2-3 to guarantee input tokens <= 30k (very low token footprint)
+
+    // Limit to top 3
     suggestedDoctors = suggestedDoctors.slice(0, 3);
 
-    // Check if user is asking to book appointment directly
-    const isBookingIntent = /đặt lịch|đặt khám|hẹn khám|book lịch|lấy số/i.test(userQuery);
     let bookingActionData = undefined;
     if (suggestedDoctors.length > 0) {
       const targetDoc = suggestedDoctors[0];
@@ -161,7 +182,7 @@ export class LangChainAgentService {
       };
     }
 
-    // 3. Try to call External LLM if apiKey provided, else fallback to Local Deterministic Agent
+    // 3. Try External LLM if apiKey provided, else fallback to Local Deterministic Agent
     const provider = dto.provider || 'local';
     let assistantMessage = '';
     let inputTokens = 0;
@@ -185,6 +206,7 @@ QUY TẮC BẮT BUỘC:
 1. Trả lời súc tích, chuyên nghiệp, bằng tiếng Việt có cấu trúc markdown rõ ràng.
 2. Tuyệt đối không quá 500 tokens.
 3. Dữ liệu tham khảo:
+${specificDoctor ? `Bác sĩ được hỏi: ${specificDoctor.name} (${specificDoctor.title}) - ${specificDoctor.clinicName} - Giá: ${specificDoctor.price.toLocaleString('vi-VN')}đ - Lịch: ${specificDoctor.availableDays.join(', ')} - Giờ: ${specificDoctor.timeSlots.join(', ')}` : ''}
 Chuyên khoa đề xuất: ${topSpecialty ? `${topSpecialty.name} (${topSpecialty.description})` : 'Đa khoa'}
 Bác sĩ phù hợp: ${suggestedDoctors.map((d) => `${d.name} (${d.title}) - ${d.clinicName} - Giá khám: ${d.price.toLocaleString('vi-VN')}đ - Lịch: ${d.availableDays.join(', ')}`).join('\n')}
 4. Luôn khuyến nghị bệnh nhân bấm nút "Đặt lịch khám" để giữ chỗ.`;
@@ -199,7 +221,7 @@ Bác sĩ phù hợp: ${suggestedDoctors.map((d) => `${d.name} (${d.title}) - ${d
         outputTokens = (resp.response_metadata?.tokenUsage?.completionTokens as number) || Math.round(assistantMessage.length / 3.5);
       } catch (err: any) {
         console.warn('[LangChainAgentService] External OpenAI call failed, falling back to local engine:', err.message);
-        assistantMessage = this.generateLocalResponse(userQuery, topSpecialty, suggestedDoctors, isBookingIntent);
+        assistantMessage = this.generateLocalResponse(userQuery, topSpecialty, suggestedDoctors, specificDoctor, specificClinic);
       }
     } else if (dto.apiKey && provider === 'anthropic') {
       try {
@@ -227,13 +249,12 @@ Dữ liệu:
         outputTokens = (resp.response_metadata?.usage?.output_tokens as number) || 280;
       } catch (err: any) {
         console.warn('[LangChainAgentService] External Anthropic call failed, falling back:', err.message);
-        assistantMessage = this.generateLocalResponse(userQuery, topSpecialty, suggestedDoctors, isBookingIntent);
+        assistantMessage = this.generateLocalResponse(userQuery, topSpecialty, suggestedDoctors, specificDoctor, specificClinic);
       }
     } else {
       // Local Deterministic Medical Expert Engine
-      assistantMessage = this.generateLocalResponse(userQuery, topSpecialty, suggestedDoctors, isBookingIntent);
-      // Realistic token calculations
-      inputTokens = Math.round(userQuery.length / 3.2) + 1450; // Context prompt simulation
+      assistantMessage = this.generateLocalResponse(userQuery, topSpecialty, suggestedDoctors, specificDoctor, specificClinic);
+      inputTokens = Math.round(userQuery.length / 3.2) + 1450;
       outputTokens = Math.min(500, Math.round(assistantMessage.length / 3.5));
     }
 
@@ -243,6 +264,7 @@ Dữ liệu:
       message: assistantMessage,
       suggestedSpecialties: topSpecialty ? [topSpecialty] : matchedSpecialties.slice(0, 2),
       suggestedDoctors: suggestedDoctors,
+      suggestedClinics: specificClinic ? [specificClinic] : undefined,
       bookingAction: bookingActionData,
       metrics: {
         latencyMs,
@@ -263,32 +285,70 @@ Dữ liệu:
     query: string,
     topSpecialty: Specialty | null,
     doctors: any[],
-    isBookingIntent: boolean,
+    specificDoctor?: any,
+    specificClinic?: Clinic,
   ): string {
     const lines: string[] = [];
+    const qClean = this.removeVietnameseTones(query);
 
-    if (topSpecialty) {
-      lines.push(`Dựa trên triệu chứng hoặc câu hỏi của quý khách, BookingCare khuyến nghị quý khách nên thăm khám tại chuyên khoa **${topSpecialty.name}**.`);
-      lines.push(`*Đặc điểm*: ${topSpecialty.description}`);
-    } else {
-      lines.push('Chào mừng quý khách đến với nền tảng đặt khám y tế số **BookingCare**.');
+    // Case 1: Inquiry about a specific doctor's price / schedule
+    if (specificDoctor) {
+      lines.push(`### 👨‍⚕️ Thông tin Bác sĩ: **${specificDoctor.name}**`);
+      lines.push(`- **Học vị & Chức danh**: ${specificDoctor.title}`);
+      lines.push(`- **Chuyên khoa**: ${specificDoctor.specialtyName}`);
+      lines.push(`- **Cơ sở công tác**: **${specificDoctor.clinicName}** (${specificDoctor.clinicCity})`);
+      lines.push(`- 💰 **Giá khám**: **${specificDoctor.price.toLocaleString('vi-VN')} VNĐ**`);
+      lines.push(`- 📅 **Ngày khám trong tuần**: **${specificDoctor.availableDays.join(', ')}**`);
+      lines.push(`- ⏰ **Các khung giờ khám**: ${specificDoctor.timeSlots.join(' | ')}`);
+      lines.push(`- *Giới thiệu tóm tắt*: ${specificDoctor.bio}`);
+      lines.push(`\n💡 Quý khách có thể bấm trực tiếp vào nút **"Đặt lịch khám"** ở thẻ bác sĩ bên dưới để chọn giờ khám thuận tiện nhất.`);
+      return lines.join('\n');
     }
 
+    // Case 2: Inquiry about a specific clinic / hospital
+    if (specificClinic) {
+      lines.push(`### 🏥 **${specificClinic.name}**`);
+      lines.push(`- **Địa chỉ**: ${specificClinic.address} (${specificClinic.city})`);
+      lines.push(`- **Thời gian làm việc**: ${specificClinic.openHours}`);
+      lines.push(`- **Hướng dẫn đi khám**: ${specificClinic.bookingInstructions}`);
+      if (doctors.length > 0) {
+        lines.push(`\n**Các bác sĩ chuyên khoa tiêu biểu tại đây:**`);
+        for (const d of doctors) {
+          lines.push(`- **${d.name}** (${d.title}) - Giá khám: **${d.price.toLocaleString('vi-VN')} VNĐ**`);
+        }
+      }
+      lines.push(`\n💡 Quý khách có thể bấm **"Đặt lịch khám"** bên dưới để đặt hẹn ưu tiên lấy số.`);
+      return lines.join('\n');
+    }
+
+    // Case 3: Inquiry about symptoms -> Recommend Specialty
+    if (topSpecialty) {
+      lines.push(`Dựa trên triệu chứng hoặc câu hỏi của quý khách, BookingCare khuyến nghị quý khách nên thăm khám tại chuyên khoa **${topSpecialty.name}**.`);
+      lines.push(`*Đặc điểm chuyên khoa*: ${topSpecialty.description}`);
+
+      if (doctors.length > 0) {
+        lines.push(`\n### 👨‍⚕️ Bác sĩ Chuyên khoa **${topSpecialty.name}** hàng đầu:`);
+        for (const d of doctors) {
+          lines.push(`- **${d.name}** (${d.title})`);
+          lines.push(`  + Nơi công tác: **${d.clinicName}** (${d.clinicCity})`);
+          lines.push(`  + Giá khám: **${d.price.toLocaleString('vi-VN')} VNĐ**`);
+          lines.push(`  + Lịch khám: ${d.availableDays.join(', ')}`);
+        }
+        lines.push(`\n💡 Quý khách có thể bấm trực tiếp vào nút **"Đặt lịch khám"** ở thẻ bác sĩ bên dưới để chọn ngày và giờ khám thuận tiện nhất.`);
+      }
+      lines.push(`\n*(Lưu ý: Tư vấn chỉ mang tính tham khảo y tế, không thay thế cho chẩn đoán trực tiếp của bác sĩ).*`);
+      return lines.join('\n');
+    }
+
+    // Case 4: General greeting
+    lines.push('Chào mừng quý khách đến với nền tảng đặt khám y tế số **BookingCare**.');
     if (doctors.length > 0) {
       lines.push('\n### 👨‍⚕️ Bác sĩ & Cơ sở y tế chuyên khoa hàng đầu:');
       for (const d of doctors) {
-        lines.push(`- **${d.name}** (${d.title})`);
-        lines.push(`  + Nơi công tác: **${d.clinicName}** (${d.clinicCity})`);
-        lines.push(`  + Giá khám: **${d.price.toLocaleString('vi-VN')} VNĐ**`);
-        lines.push(`  + Lịch khám: ${d.availableDays.join(', ')} (Ca sáng & chiều)`);
+        lines.push(`- **${d.name}** (${d.title}) - **${d.clinicName}** - Giá: **${d.price.toLocaleString('vi-VN')} VNĐ**`);
       }
-      lines.push('\n💡 Quý khách có thể bấm trực tiếp vào nút **"Đặt lịch khám"** ở thẻ bác sĩ bên dưới để chọn giờ khám thuận tiện nhất.');
-    } else {
-      lines.push('\nHiện tại hệ thống đang kết nối thêm các bác sĩ theo tiêu chí lọc này. Quý khách vui lòng thử tìm kiếm theo khu vực Hà Nội hoặc TP.HCM.');
+      lines.push('\n💡 Quý khách có thể mô tả triệu chứng hoặc tên bác sĩ/bệnh viện cần tìm để được hỗ trợ chính xác nhất.');
     }
-
-    lines.push('\n*(Lưu ý: Thông tin tư vấn chỉ mang tính tham khảo y tế, không thay thế cho chỉ định trực tiếp của bác sĩ).*');
-
     return lines.join('\n');
   }
 }
