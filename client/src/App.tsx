@@ -32,6 +32,12 @@ const DEFAULT_WELCOME_MESSAGE: ChatMessage = {
   timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
 };
 
+const getTomorrowFormattedDate = () => {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  return d.toISOString().split('T')[0];
+};
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<'chat' | 'benchmark'>('chat');
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
@@ -61,7 +67,7 @@ export default function App() {
     patientName: '',
     patientPhone: '',
     patientEmail: '',
-    date: '2026-11-20',
+    date: getTomorrowFormattedDate(),
     timeSlot: '08:00 - 09:30',
     symptoms: '',
   });

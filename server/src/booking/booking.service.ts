@@ -62,8 +62,8 @@ export class BookingService implements OnModuleInit {
     const clinic = this.catalogService.getClinicById(doc.clinicId);
     const specialty = this.catalogService.getSpecialtyById(doc.specialtyId);
 
-    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-    const appointmentId = `BKC-${randomSuffix}`;
+    const seq = (this.appointments.length + 1).toString().padStart(4, '0');
+    const appointmentId = `BKC-${seq}`;
 
     const newAppointment: Appointment = {
       id: appointmentId,
