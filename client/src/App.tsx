@@ -8,7 +8,6 @@ import {
   Clock,
   FileText,
   Hospital,
-  MapPin,
   RefreshCw,
   Search,
   Send,
@@ -472,7 +471,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Right Sidebar: Appointments & Hospital Directory */}
+            {/* Right Sidebar: Appointments */}
             <div className="space-y-6">
               {/* Booked Appointments */}
               <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
@@ -512,42 +511,6 @@ export default function App() {
                     ))}
                   </div>
                 )}
-              </div>
-
-              {/* Emergency Hotline Info */}
-              <div className="bg-gradient-to-br from-rose-500 to-red-600 text-white rounded-2xl p-5 shadow-sm space-y-2">
-                <div className="flex items-center space-x-2 font-bold text-base">
-                  <AlertTriangle className="w-5 h-5" />
-                  <span>Đường Dây Nóng Cấp Cứu 115</span>
-                </div>
-                <p className="text-xs text-rose-100 leading-relaxed">
-                  Nếu xuất hiện các dấu hiệu: đau ngực thắt, đột quỵ méo miệng, nôn ra máu, co giật, xin vui lòng gọi 115 hoặc đến ngay Bệnh viện gần nhất.
-                </p>
-              </div>
-
-              {/* BookingCare Partner Clinics */}
-              <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm text-xs space-y-3">
-                <h4 className="font-bold text-slate-900 text-sm flex items-center">
-                  <Hospital className="w-4 h-4 mr-2 text-cyan-600" /> Bệnh viện Liên kết Nổi bật
-                </h4>
-                <ul className="space-y-2 text-slate-600">
-                  <li className="flex items-start">
-                    <MapPin className="w-3.5 h-3.5 mr-1.5 text-cyan-600 shrink-0 mt-0.5" />
-                    <span><strong>BV Chợ Rẫy</strong> - 201B Nguyễn Chí Thanh, Q.5, TP.HCM</span>
-                  </li>
-                  <li className="flex items-start">
-                    <MapPin className="w-3.5 h-3.5 mr-1.5 text-cyan-600 shrink-0 mt-0.5" />
-                    <span><strong>BV Hữu nghị Việt Đức</strong> - 40 Tràng Thi, Hoàn Kiếm, HN</span>
-                  </li>
-                  <li className="flex items-start">
-                    <MapPin className="w-3.5 h-3.5 mr-1.5 text-cyan-600 shrink-0 mt-0.5" />
-                    <span><strong>BV Bạch Mai</strong> - 78 Giải Phóng, Đống Đa, HN</span>
-                  </li>
-                  <li className="flex items-start">
-                    <MapPin className="w-3.5 h-3.5 mr-1.5 text-cyan-600 shrink-0 mt-0.5" />
-                    <span><strong>BV Đại học Y Dược</strong> - 215 Hồng Bàng, Q.5, TP.HCM</span>
-                  </li>
-                </ul>
               </div>
             </div>
           </div>
