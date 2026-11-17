@@ -13,6 +13,7 @@ import {
   Send,
   ShieldCheck,
   Stethoscope,
+  Trash2,
   User,
   Zap,
 } from 'lucide-react';
@@ -26,13 +27,45 @@ const SUGGESTION_QUERIES = [
   'Đau ngực dữ dội lan ra cánh tay trái, khó thở vã mồ hôi hột',
 ];
 
+const DEFAULT_WELCOME_MESSAGE: ChatMessage = {
+  id: 'msg-welcome',
+  role: 'assistant',
+  content: `Xin chào quý khách! Tôi là **Trợ lý AI Y tế BookingCare**.\n\nTôi có thể hỗ trợ quý khách:\n1. **Tư vấn triệu chứng** & gợi ý chuyên khoa phù hợp.\n2. **Tìm kiếm Bác sĩ & Bệnh viện** hàng đầu (Bạch Mai, Chợ Rẫy, Việt Đức, ĐH Y Dược...).\n3. **Tra cứu giá khám** & các khung giờ còn trống.\n4. **Đặt lịch khám nhanh chóng**, nhận ngay mã phiếu hẹn điện tử.\n\nQuý khách đang có triệu chứng gì hoặc muốn đặt lịch khám với chuyên gia nào?`,
+  timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
+  metrics: {
+    latencyMs: 120,
+    inputTokens: 120,
+    outputTokens: 180,
+    modelUsed: 'BookingCare-Assistant-v1',
+    provider: 'Local-Medical-RAG',
+    isWithinTokenLimit: true,
+    isWithinLatencyLimit: true,
+  },
+};
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<'chat' | 'benchmark'>('chat');
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    try {
+      const saved = localStorage.getItem('bookingcare_chat_history');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {
+      // ignore
+    }
+    return [DEFAULT_WELCOME_MESSAGE];
+  });
+
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [provider, setProvider] = useState<'local' | 'openai' | 'anthropic'>('local');
-  const [apiKey, setApiKey] = useState('');
+  const [provider, setProvider] = useState<'local' | 'openai' | 'anthropic'>(() => {
+    return (localStorage.getItem('bookingcare_provider') as any) || 'local';
+  });
+  const [apiKey, setApiKey] = useState(() => {
+    return localStorage.getItem('bookingcare_api_key') || '';
+  });
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [selectedDoctorForBooking, setSelectedDoctorForBooking] = useState<Doctor | null>(null);
   const [bookingFormData, setBookingFormData] = useState({
@@ -53,29 +86,36 @@ export default function App() {
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Initial welcome message and load appointments
+  // Sync state to localStorage
   useEffect(() => {
-    setMessages([
-      {
-        id: 'msg-welcome',
-        role: 'assistant',
-        content: `Xin chào quý khách! Tôi là **Trợ lý AI Y tế BookingCare**.\n\nTôi có thể hỗ trợ quý khách:\n1. **Tư vấn triệu chứng** & gợi ý chuyên khoa phù hợp.\n2. **Tìm kiếm Bác sĩ & Bệnh viện** hàng đầu (Bạch Mai, Chợ Rẫy, Việt Đức, ĐH Y Dược...).\n3. **Tra cứu giá khám** & các khung giờ còn trống.\n4. **Đặt lịch khám nhanh chóng**, nhận ngay mã phiếu hẹn điện tử.\n\nQuý khách đang có triệu chứng gì hoặc muốn đặt lịch khám với chuyên gia nào?`,
-        timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
-        metrics: {
-          latencyMs: 120,
-          inputTokens: 120,
-          outputTokens: 180,
-          modelUsed: 'BookingCare-Assistant-v1',
-          provider: 'Local-Medical-RAG',
-          isWithinTokenLimit: true,
-          isWithinLatencyLimit: true,
-        },
-      },
-    ]);
+    try {
+      localStorage.setItem('bookingcare_chat_history', JSON.stringify(messages));
+    } catch {
+      // ignore
+    }
+  }, [messages]);
 
+  useEffect(() => {
+    localStorage.setItem('bookingcare_provider', provider);
+  }, [provider]);
+
+  useEffect(() => {
+    localStorage.setItem('bookingcare_api_key', apiKey);
+  }, [apiKey]);
+
+  // Initial load
+  useEffect(() => {
     fetchAppointments();
     fetchBenchmark();
   }, []);
+
+  const handleClearChatHistory = () => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa toàn bộ lịch sử trò chuyện không?')) {
+      const reset = [DEFAULT_WELCOME_MESSAGE];
+      setMessages(reset);
+      localStorage.removeItem('bookingcare_chat_history');
+    }
+  };
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -327,8 +367,18 @@ export default function App() {
                   <span>📥 Input: <strong className="text-slate-800">&le; 30k tokens</strong></span>
                   <span>📤 Output: <strong className="text-slate-800">&le; 500 tokens</strong></span>
                 </div>
-                <div className="text-cyan-700 font-medium bg-cyan-50 px-2 py-0.5 rounded border border-cyan-100">
-                  LangChain + TypeScript + ReactJS
+                <div className="flex items-center space-x-2">
+                  <span className="text-cyan-700 font-medium bg-cyan-50 px-2 py-0.5 rounded border border-cyan-100 hidden sm:inline">
+                    LangChain + TypeScript + ReactJS
+                  </span>
+                  <button
+                    onClick={handleClearChatHistory}
+                    title="Xóa lịch sử trò chuyện"
+                    className="flex items-center space-x-1 text-slate-500 hover:text-rose-600 px-2 py-0.5 rounded hover:bg-rose-50 transition-colors text-[11px] font-medium"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Xóa chat</span>
+                  </button>
                 </div>
               </div>
 
